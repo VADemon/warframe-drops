@@ -128,7 +128,7 @@ function extractChances(text)
 									writeKey = writeKey .. " > ".. h3id:match("^[^A-Z]+") ..": ".. tdh
 								elseif column == 2 then
 									modDropChance = tonumber(tdh:match("(%d+%.?%d*)%%")) / 100
-									writeKey = writeKey .. " (".. modDropChance .."%)"
+									writeKey = writeKey .. " (".. modDropChance*100 .."%)"
 									
 									if not dropTable[writeKey] then
 										dropTable[writeKey] = {}
@@ -155,7 +155,7 @@ function extractChances(text)
 									
 									dropTable[writeKey][itemName] = itemChance
 									
-									--print("W|".. writeKey ..": ".. itemName, itemChance)
+									print("W|".. writeKey ..": ".. itemName, itemChance)
 								end
 							else
 								error("Unknown type: ".. ttype .."! <td> or <th> expected in table ".. writeKey)
@@ -240,7 +240,7 @@ function filter(dropTbl, name, minChance)
 				-- missionRewards > Event: Eris/Phalan (Interception) > Rotation C
 				local rotationChance = 1
 				local rotationChar = dropSource:match("Rotation (%w)")
-				if not dropSource:find("cetusRewards") and dropSource:find("Rotation %w") then
+				if rotationChar and not dropSource:find("cetusRewards") and not dropSource:find(" (Spy)", 1, true) then
 					if rotationChar == "A" then
 						rotationChance = 2
 					elseif rotationChar == "B" then
